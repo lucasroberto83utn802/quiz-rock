@@ -116,7 +116,7 @@
         justify-content: center;
         border-radius: 15px;
         align-items: center;
-        background: url('IMG/quizde.png ') no-repeat center center / cover;
+        background: url('./IMG/quizde.png ') no-repeat center center / cover;
         z-index: 10;
         position: relative;
       "
@@ -158,14 +158,14 @@
         border-radius: 15px;
         overflow: hidden;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        background: url('img/2.png') no-repeat center center / cover;
+        background: url('./img/2.png') no-repeat center center / cover;
       "
     >
       <div class="quiz-header">
         <div class="left-side">
           <div id="timer" class="info-box">30s</div>
           <div class="difficulty-level">
-            <img src="IMG/raiorock.png" alt="Fácil" />
+            <img src="./IMG/raiorock.png" alt="Fácil" />
             
           </div>
         </div>
@@ -468,7 +468,7 @@
           if (currentQuestion.image) {
             bgImage.style.backgroundImage = `url(${currentQuestion.image})`;
           } else {
-            bgImage.style.backgroundImage = `url('img/2.png')`;
+            bgImage.style.backgroundImage = `url('./img/2.png')`;
           }
 
           questionText.textContent = currentQuestion.question;
