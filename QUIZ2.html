@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz de Rock - Fase 2</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #191815;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .quiz-header {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 5;
+      }
+      .quiz-header .left-side,
+      .quiz-header .right-side {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .difficulty-level {
+        display: flex;
+        gap: 3px;
+      }
+      .difficulty-level img {
+        width: 45px; /* Tamanho do símbolo */
+        height: 45px;
+        filter: drop-shadow(1px 1px 2px #000);
+      }
+      .info-box {
+        background: rgba(0, 0, 0, 0.9);
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #ff6347;
+        border: 2px solid #fff;
+        font-family: 'Impact', sans-serif;
+        text-shadow: 2px 2px 4px #000;
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.7);
+      }
+
+      .option-btn:hover {
+        transform: scale(1.05);
+        background-color: #555;
+      }
+
+      /* Estilos que só são aplicados após o clique */
+      .option-btn.correct {
+        background-color: #4caf50;
+        border-color: #4caf50;
+        color: white;
+      }
+
+      .option-btn.wrong {
+        background-color: #f44336;
+        border-color: #f44336;
+        color: white;
+      }
+
+      .option-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      #final-screen button:hover {
+        background-color: #e55333;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="quiz-container"
+      id="quiz-container"
+      style="
+        position: relative;
+        width: 375px;
+        height: 667px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding-bottom: 50px;
+        box-sizing: border-box;
+        color: #fff;
+        text-align: center;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        background: url('img/2.png') no-repeat center center / cover;
+      "
+    >
+      <div class="quiz-header">
+        <div class="left-side">
+          <div id="timer" class="info-box">30s</div>
+          <div class="difficulty-level">
+            <img src="IMG/raiorock.png" alt="Dificuldade 1" />
+            <img src="IMG/raiorock.png" alt="Dificuldade 2" />
+          </div>
+        </div>
+        <div class="right-side">
+          <div id="score-counter" class="info-box">Pontos: 0</div>
+        </div>
+      </div>
+      <div
+        class="question-box"
+        style="
+          background: rgba(0, 0, 0, 0.7);
+          border-radius: 20px;
+          padding: 20px;
+          margin: 0 20px 20px;
+          color: #fff;
+          font-size: 1.1em;
+          font-weight: bold;
+          line-height: 1.4;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        "
+      >
+        <p id="question-text"></p>
+      </div>
+      <div
+        class="options-grid"
+        id="options"
+        style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+          width: 100%;
+          padding: 0 20px;
+          box-sizing: border-box;
+        "
+      >
+        <button
+          class="option-btn"
+          data-option="A"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+        <button
+          class="option-btn"
+          data-option="B"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+        <button
+          class="option-btn"
+          data-option="C"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+        <button
+          class="option-btn"
+          data-option="D"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+      </div>
+      <div
+        id="feedback"
+        style="
+          font-size: 1.5em;
+          font-weight: bold;
+          margin-top: 15px;
+          color: #f7a400;
+          text-shadow: 1px 1px 2px #000;
+        "
+      ></div>
+    </div>
+    <div
+      id="final-screen"
+      style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        display: none;
+      "
+    >
+      <h1
+        style="
+          font-family: 'Impact', sans-serif;
+          color: #ff6347;
+          font-size: 2.5em;
+          text-shadow: 3px 3px 6px #000;
+          margin-bottom: 10px;
+        "
+      >
+        Fim do Quiz!
+      </h1>
+      <p style="font-size: 1.2em; margin: 10px 0; color: #fff">
+        Sua pontuação final foi:
+        <span
+          id="final-score"
+          style="
+            color: #ff6347;
+            font-weight: bold;
+            font-family: 'Impact', sans-serif;
+          "
+          >0</span
+        >
+      </p>
+      <p style="font-size: 1.2em; margin: 10px 0; color: #fff">
+        Você acertou
+        <span
+          id="correct-answers-count"
+          style="
+            color: #ff6347;
+            font-weight: bold;
+            font-family: 'Impact', sans-serif;
+          "
+          >0</span
+        >
+        de 10 perguntas!
+      </p>
+      <button
+        onclick="goToNextPhase('QUIZ3.HTML')"
+        style="
+          margin-top: 20px;
+          padding: 10px 20px;
+          border: none;
+          background: #ff6347;
+          color: #fff;
+          font-size: 1em;
+          font-weight: bold;
+          border-radius: 30px;
+          cursor: pointer;
+          transition: background-color 0.2s ease, transform 0.2s ease;
+          margin-right: 10px;
+        "
+      >
+        Próxima Fase
+      </button>
+      <button
+        onclick="window.location.reload()"
+        style="
+          margin-top: 20px;
+          padding: 10px 20px;
+          border: none;
+          background: #ff6347;
+          color: #fff;
+          font-size: 1em;
+          font-weight: bold;
+          border-radius: 30px;
+          cursor: pointer;
+          transition: background-color 0.2s ease, transform 0.2s ease;
+        "
+      >
+        Jogar Novamente
+      </button>
+    </div>
+    <script>
+      const questions = [
+        {
+          question:
+            "1. Qual foi a banda que ganhou o prêmio de 'Melhor Novo Artista' no Grammy de 1989, mas recusou o prêmio em protesto contra a indústria musical?",
+          options: {
+            A: "Metallica",
+            B: "Guns N' Roses",
+            C: "Jethro Tull",
+            D: "Nirvana",
+          },
+          correct: "C",
+          image: "img/1.png",
+        },
+        {
+          question:
+            "2. Qual banda de rock psicodélico é famosa por seus shows de luzes, longas jams instrumentais e pelo mascote 'Skull & Roses'?",
+          options: {
+            A: "Grateful Dead",
+            B: "The Doors",
+            C: "The Jimi Hendrix Experience",
+            D: "Jefferson Airplane",
+          },
+          correct: "A",
+          image: "img/2.png",
+        },
+        {
+          question:
+            "3. O grupo de rock progressivo Genesis, em sua formação clássica, era liderado por qual vocalista e flautista?",
+          options: {
+            A: "Phil Collins",
+            B: "Peter Gabriel",
+            C: "Tony Banks",
+            D: "Mike Rutherford",
+          },
+          correct: "B",
+          image: "img/3.png",
+        },
+        {
+          question:
+            "4. Qual a banda de rock que tem como vocalista a cantora Florence Welch, conhecida por seu estilo etéreo e voz poderosa?",
+          options: {
+            A: "Florence + The Machine",
+            B: "The Cranberries",
+            C: "Paramore",
+            D: "Garbage",
+          },
+          correct: "A",
+          image: "img/4.png",
+        },
+        {
+          question:
+            "5. Qual banda de rock alemã, formada nos anos 60, é considerada uma das pioneiras do 'krautrock'?",
+          options: {
+            A: "Scorpions",
+            B: "Rammstein",
+            C: "Can",
+            D: "Kraftwerk",
+          },
+          correct: "C",
+          image: "img/5.png",
+        },
+        {
+          question:
+            "6. A banda de rock Rush, da qual Neal Peart era baterista, é de qual país?",
+          options: {
+            A: "Estados Unidos",
+            B: "Reino Unido",
+            C: "Canadá",
+            D: "Austrália",
+          },
+          correct: "C",
+          image: "img/6.png",
+        },
+        {
+          question:
+            "7. Qual é a banda de rock que, na década de 1970, ficou famosa por seus shows extravagantes, maquiagens elaboradas e uso de pirotecnia no palco?",
+          options: {
+            A: "Alice Cooper",
+            B: "Queen",
+            C: "Kiss",
+            D: "Led Zeppelin",
+          },
+          correct: "C",
+          image: "img/7.png",
+        },
+        {
+          question:
+            "8. Qual a banda de heavy metal que vendeu mais de 100 milhões de cópias de seus álbuns e é considerada uma das 'Big Four' do thrash metal?",
+          options: {
+            A: "Slayer",
+            B: "Megadeth",
+            C: "Anthrax",
+            D: "Metallica",
+          },
+          correct: "D",
+          image: "img/8.png",
+        },
+        {
+          question:
+            "9. Qual banda de rock alternativo dos anos 90 é conhecida pela música 'Creep' e pelo álbum 'OK Computer'?",
+          options: {
+            A: "Oasis",
+            B: "Blur",
+            C: "Radiohead",
+            D: "Smashing Pumpkins",
+          },
+          correct: "C",
+          image: "img/9.png",
+        },
+        {
+          question:
+            "10. Qual vocalista é conhecido por sua voz única e por ter cantado em uma das bandas mais populares do rock progressivo, Yes?",
+          options: {
+            A: "Jon Anderson",
+            B: "Ian Gillan",
+            C: "Peter Gabriel",
+            D: "Geddy Lee",
+          },
+          correct: "A",
+          image: "img/10.png",
+        },
+      ];
+
+      let currentQuestionIndex = 0;
+      let score = 0;
+      let correctAnswersCount = 0;
+      let timerInterval;
+
+      const quizContainer = document.getElementById("quiz-container");
+      const questionText = document.getElementById("question-text");
+      const optionsContainer = document.getElementById("options");
+      const scoreCounter = document.getElementById("score-counter");
+      const timerElement = document.getElementById("timer");
+      const feedbackElement = document.getElementById("feedback");
+      const finalScreen = document.getElementById("final-screen");
+      const finalScoreElement = document.getElementById("final-score");
+      const correctAnswersCountElement = document.getElementById(
+        "correct-answers-count"
+      );
+
+      function startQuiz() {
+        showQuestion();
+      }
+
+      function showQuestion() {
+        if (currentQuestionIndex < questions.length) {
+          const currentQuestion = questions[currentQuestionIndex];
+          const bgImage = document.getElementById("quiz-container");
+          bgImage.style.backgroundImage = `url(${currentQuestion.image})`;
+
+          questionText.textContent = currentQuestion.question;
+          optionsContainer.innerHTML = "";
+          const optionKeys = Object.keys(currentQuestion.options);
+          optionKeys.forEach((key) => {
+            const button = document.createElement("button");
+            button.classList.add("option-btn");
+            button.textContent = `${key}. ${currentQuestion.options[key]}`;
+            button.setAttribute("data-option", key);
+            button.onclick = () => checkAnswer(key, button);
+            button.style.cssText =
+              "background: #333; color: #fff; border: 2px solid #555; padding: 15px 10px; border-radius: 50px; font-weight: bold; font-size: 0.9em; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease;";
+            optionsContainer.appendChild(button);
+          });
+          feedbackElement.textContent = "";
+          startTimer();
+        } else {
+          showFinalResults();
+        }
+      }
+
+      function startTimer() {
+        let timeLeft = 30;
+        timerElement.textContent = `${timeLeft}s`;
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          timerElement.textContent = `${timeLeft}s`;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            handleTimeout();
+          }
+        }, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      function checkAnswer(selectedOption, button) {
+        stopTimer();
+        const currentQuestion = questions[currentQuestionIndex];
+        const allOptionButtons =
+          optionsContainer.querySelectorAll(".option-btn");
+        allOptionButtons.forEach((btn) => {
+          btn.disabled = true;
+          if (btn.getAttribute("data-option") === currentQuestion.correct) {
+            btn.classList.add("correct");
+          }
+        });
+        if (selectedOption === currentQuestion.correct) {
+          score += 20;
+          correctAnswersCount++;
+          feedbackElement.textContent = "Certo!";
+          feedbackElement.style.color = "#4CAF50";
+        } else {
+          score = Math.max(0, score - 5);
+          button.classList.add("wrong");
+          feedbackElement.textContent = "Errado!";
+          feedbackElement.style.color = "#F44336";
+        }
+        scoreCounter.textContent = `Pontos: ${score}`;
+
+        setTimeout(() => {
+          currentQuestionIndex++;
+          showQuestion();
+        }, 2000);
+      }
+
+      function handleTimeout() {
+        score = Math.max(0, score - 5);
+        feedbackElement.textContent = "Tempo esgotado! -5 pontos.";
+        feedbackElement.style.color = "#F44336";
+        scoreCounter.textContent = `Pontos: ${score}`;
+        const currentQuestion = questions[currentQuestionIndex];
+        const allOptionButtons =
+          optionsContainer.querySelectorAll(".option-btn");
+        allOptionButtons.forEach((btn) => {
+          btn.disabled = true;
+          if (btn.getAttribute("data-option") === currentQuestion.correct) {
+            btn.classList.add("correct");
+          }
+        });
+        setTimeout(() => {
+          currentQuestionIndex++;
+          showQuestion();
+        }, 2000);
+      }
+
+      function showFinalResults() {
+        quizContainer.style.display = "none";
+        finalScreen.style.display = "block";
+        finalScoreElement.textContent = score;
+        correctAnswersCountElement.textContent = correctAnswersCount;
+      }
+      
+      // Nova função para a próxima fase
+      function goToNextPhase(url) {
+        window.location.href = url;
+      }
+      startQuiz();
+    </script>
+  </body>
+</html>

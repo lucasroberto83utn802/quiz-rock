@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz de Rock - Músicas</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #191815;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .quiz-header {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 5;
+      }
+      .quiz-header .left-side,
+      .quiz-header .right-side {
+        display: flex;
+        align-items: center;
+        gap: -12px;
+      }
+      .difficulty-level {
+        display: flex;
+        gap: 3px;
+      }
+      .difficulty-level img {
+        width: 45px; /* Tamanho do símbolo */
+        height: 45px;
+        filter: drop-shadow(1px 1px 2px #000);
+      }
+      .info-box {
+        background: rgba(0, 0, 0, 0.9);
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #ff6347;
+        border: 2px solid #fff;
+        font-family: 'Impact', sans-serif;
+        text-shadow: 2px 2px 4px #000;
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.7);
+      }
+
+      .option-btn:hover {
+        transform: scale(1.05);
+        background-color: #555;
+      }
+
+      .option-btn.correct {
+        background-color: #4caf50;
+        border-color: #4caf50;
+        color: white;
+      }
+
+      .option-btn.wrong {
+        background-color: #f44336;
+        border-color: #f44336;
+        color: white;
+      }
+
+      .option-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      #final-screen button:hover {
+        background-color: #e55333;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="quiz-container"
+      id="quiz-container"
+      style="
+        position: relative;
+        width: 375px;
+        height: 667px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding-bottom: 50px;
+        box-sizing: border-box;
+        color: #fff;
+        text-align: center;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        background: url('img/12.png') no-repeat center center / cover;
+      "
+    >
+      <div class="quiz-header">
+        <div class="left-side">
+          <div id="timer" class="info-box">30s</div>
+          <div class="difficulty-level">
+            <img src="IMG/raiorock.png" alt="Dificuldade 1" />
+            <img src="IMG/raiorock.png" alt="Dificuldade 2" />
+            <img src="IMG/raiorock.png" alt="Dificuldade 3" />
+          </div>
+        </div>
+        <div class="right-side">
+          <div id="score-counter" class="info-box">Pontos: 0</div>
+        </div>
+      </div>
+      <div
+        class="question-box"
+        style="
+          background: rgba(0, 0, 0, 0.7);
+          border-radius: 20px;
+          padding: 20px;
+          margin: 0 20px 20px;
+          color: #fff;
+          font-size: 1.1em;
+          font-weight: bold;
+          line-height: 1.4;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        "
+      >
+        <p id="question-text"></p>
+      </div>
+      <div
+        class="options-grid"
+        id="options"
+        style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+          width: 100%;
+          padding: 0 20px;
+          box-sizing: border-box;
+        "
+      >
+        <button
+          class="option-btn"
+          data-option="A"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+        <button
+          class="option-btn"
+          data-option="B"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+        <button
+          class="option-btn"
+          data-option="C"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+        <button
+          class="option-btn"
+          data-option="D"
+          style="
+            background: #333;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 15px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+          "
+        ></button>
+      </div>
+      <div
+        id="feedback"
+        style="
+          font-size: 1.5em;
+          font-weight: bold;
+          margin-top: 15px;
+          color: #f7a400;
+          text-shadow: 1px 1px 2px #000;
+        "
+      ></div>
+    </div>
+    <div
+      id="final-screen"
+      style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        display: none;
+      "
+    >
+      <h1
+        style="
+          font-family: 'Impact', sans-serif;
+          color: #ff6347;
+          font-size: 2.5em;
+          text-shadow: 3px 3px 6px #000;
+          margin-bottom: 10px;
+        "
+      >
+        Fim do Quiz!
+      </h1>
+      <p style="font-size: 1.2em; margin: 10px 0; color: #fff">
+        Sua pontuação final foi:
+        <span
+          id="final-score"
+          style="
+            color: #ff6347;
+            font-weight: bold;
+            font-family: 'Impact', sans-serif;
+          "
+          >0</span
+        >
+      </p>
+      <p style="font-size: 1.2em; margin: 10px 0; color: #fff">
+        Você acertou
+        <span
+          id="correct-answers-count"
+          style="
+            color: #ff6347;
+            font-weight: bold;
+            font-family: 'Impact', sans-serif;
+          "
+          >0</span
+        >
+        de 10 perguntas!
+      </p>
+      <button
+        onclick="window.location.href = 'QUIZ1.HTML'"
+        style="
+          margin-top: 20px;
+          padding: 10px 20px;
+          border: none;
+          background: #ff6347;
+          color: #fff;
+          font-size: 1em;
+          font-weight: bold;
+          border-radius: 30px;
+          cursor: pointer;
+          transition: background-color 0.2s ease, transform 0.2s ease;
+        "
+      >
+        Voltar para o Início
+      </button>
+    </div>
+    <script>
+      const questions = [
+        {
+          question:
+            "1. A música 'Stairway to Heaven' (1971) do Led Zeppelin é famosa por sua estrutura em seções. Qual instrumento de sopro é usado no solo central, logo antes da canção se intensificar?",
+          options: {
+            A: "Flauta",
+            B: "Oboé",
+            C: "Clarinet",
+            D: "Saxofone",
+          },
+          correct: "A",
+          image: "img/2.png",
+        },
+        {
+          question:
+            "2. O título da música 'Smells Like Teen Spirit' do Nirvana foi inspirado por uma frase que Kathleen Hanna, do Bikini Kill, escreveu na parede do quarto de Kurt Cobain. O que a frase significava originalmente?",
+          options: {
+            A: "Uma referência a um desodorante feminino",
+            B: "Um elogio ao seu estilo musical",
+            C: "Uma crítica à sua rebeldia",
+            D: "Um código para 'vamos começar uma revolução'",
+          },
+          correct: "A",
+          image: "img/3.png",
+        },
+        {
+          question:
+            "3. A canção 'Comfortably Numb' do Pink Floyd, do álbum 'The Wall' (1979), é famosa por seus solos de guitarra. Qual guitarrista tocou ambos os solos, o primeiro mais melódico e o segundo mais explosivo?",
+          options: {
+            A: "Roger Waters",
+            B: "David Gilmour",
+            C: "Syd Barrett",
+            D: "Nick Mason",
+          },
+          correct: "B",
+          image: "img/4.png",
+        },
+        {
+          question:
+            "4. A música 'A Day in the Life' dos Beatles, do álbum 'Sgt. Pepper's Lonely Hearts Club Band', é notável por sua seção orquestral caótica. Qual técnica de gravação foi usada para criar o som ascendente e fora de controle da orquestra?",
+          options: {
+            A: "Backmasking",
+            B: "Fita vari-speed",
+            C: "Reverb de câmara",
+            D: "Gravação multitrack em oito canais",
+          },
+          correct: "B",
+          image: "img/5.png",
+        },
+        {
+          question:
+            "5. A música 'Bohemian Rhapsody' do Queen é famosa por sua seção de ópera. Quantas camadas de voz de Freddie Mercury, Brian May e Roger Taylor foram gravadas e sobrepostas para criar a complexidade vocal dessa seção?",
+          options: {
+            A: "Cerca de 10 a 20",
+            B: "Cerca de 40 a 60",
+            C: "Cerca de 80 a 100",
+            D: "Mais de 180",
+          },
+          correct: "D",
+          image: "img/6.png",
+        },
+        {
+          question:
+            "6. A música 'Paint It Black' (1966) dos Rolling Stones é conhecida por seu som oriental e sombrio. Qual instrumento de cordas indiano foi usado para criar a melodia marcante do refrão?",
+          options: {
+            A: "Sitar",
+            B: "Cítara",
+            C: "Sarod",
+            D: "Tambura",
+          },
+          correct: "A",
+          image: "img/7.png",
+        },
+        {
+          question:
+            "7. A música 'War Pigs' do Black Sabbath, do álbum 'Paranoid', originalmente tinha um título diferente e um significado ainda mais explícito. Qual era o título original da canção?",
+          options: {
+            A: "Evil Woman",
+            B: "Iron Man",
+            C: "Walpurgis",
+            D: "Electric Funeral",
+          },
+          correct: "C",
+          image: "img/8.png",
+        },
+        {
+          question:
+            "8. 'London Calling' (1979) do The Clash é uma música que mistura punk rock com influências de outros gêneros. Qual o nome dos dois gêneros musicais jamaicanos que a banda incluiu nesta música?",
+          options: {
+            A: "Ska e Reggae",
+            B: "Calypso e Dancehall",
+            C: "Dub e Rocksteady",
+            D: "Ska e Rocksteady",
+          },
+          correct: "A",
+          image: "img/9.png",
+        },
+        {
+          question:
+            "9. A música 'Hotel California' (1976) dos Eagles é famosa por seu solo de guitarra final, que é dividido entre dois guitarristas. Quais são os nomes desses dois guitarristas?",
+          options: {
+            A: "Don Felder e Joe Walsh",
+            B: "Glenn Frey e Joe Walsh",
+            C: "Don Felder e Glenn Frey",
+            D: "Joe Walsh e Don Henley",
+          },
+          correct: "A",
+          image: "img/10.png",
+        },
+        {
+          question:
+            "10. A música 'Whole Lotta Love' (1969) do Led Zeppelin é conhecida por sua seção central psicodélica. Qual instrumento eletrônico, usado por Jimmy Page, cria a sonoridade de ficção científica nessa seção?",
+          options: {
+            A: "Moog Synthesizer",
+            B: "Mellotron",
+            C: "Theremin",
+            D: "Hammond Organ",
+          },
+          correct: "C",
+          image: "img/11.png",
+        },
+      ];
+
+      let currentQuestionIndex = 0;
+      let score = 0;
+      let correctAnswersCount = 0;
+      let timerInterval;
+
+      const quizContainer = document.getElementById("quiz-container");
+      const questionText = document.getElementById("question-text");
+      const optionsContainer = document.getElementById("options");
+      const scoreCounter = document.getElementById("score-counter");
+      const timerElement = document.getElementById("timer");
+      const feedbackElement = document.getElementById("feedback");
+      const finalScreen = document.getElementById("final-screen");
+      const finalScoreElement = document.getElementById("final-score");
+      const correctAnswersCountElement = document.getElementById(
+        "correct-answers-count"
+      );
+
+      function startQuiz() {
+        showQuestion();
+      }
+
+      function showQuestion() {
+        if (currentQuestionIndex < questions.length) {
+          const currentQuestion = questions[currentQuestionIndex];
+          const bgImage = document.getElementById("quiz-container");
+          bgImage.style.backgroundImage = `url(${currentQuestion.image})`;
+
+          questionText.textContent = currentQuestion.question;
+          optionsContainer.innerHTML = "";
+          const optionKeys = Object.keys(currentQuestion.options);
+          optionKeys.forEach((key) => {
+            const button = document.createElement("button");
+            button.classList.add("option-btn");
+            button.textContent = `${key}. ${currentQuestion.options[key]}`;
+            button.setAttribute("data-option", key);
+            button.onclick = () => checkAnswer(key, button);
+            button.style.cssText =
+              "background: #333; color: #fff; border: 2px solid #555; padding: 15px 10px; border-radius: 50px; font-weight: bold; font-size: 0.9em; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease;";
+            optionsContainer.appendChild(button);
+          });
+          feedbackElement.textContent = "";
+          startTimer();
+        } else {
+          showFinalResults();
+        }
+      }
+
+      function startTimer() {
+        let timeLeft = 30;
+        timerElement.textContent = `${timeLeft}s`;
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          timerElement.textContent = `${timeLeft}s`;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            handleTimeout();
+          }
+        }, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      function checkAnswer(selectedOption, button) {
+        stopTimer();
+        const currentQuestion = questions[currentQuestionIndex];
+        const allOptionButtons =
+          optionsContainer.querySelectorAll(".option-btn");
+        allOptionButtons.forEach((btn) => {
+          btn.disabled = true;
+          if (btn.getAttribute("data-option") === currentQuestion.correct) {
+            btn.classList.add("correct");
+          }
+        });
+        if (selectedOption === currentQuestion.correct) {
+          score += 20;
+          correctAnswersCount++;
+          feedbackElement.textContent = "Certo!";
+          feedbackElement.style.color = "#4CAF50";
+        } else {
+          score = Math.max(0, score - 5);
+          button.classList.add("wrong");
+          feedbackElement.textContent = "Errado!";
+          feedbackElement.style.color = "#F44336";
+        }
+        scoreCounter.textContent = `Pontos: ${score}`;
+
+        setTimeout(() => {
+          currentQuestionIndex++;
+          showQuestion();
+        }, 2000);
+      }
+
+      function handleTimeout() {
+        score = Math.max(0, score - 5);
+        feedbackElement.textContent = "Tempo esgotado! -5 pontos.";
+        feedbackElement.style.color = "#F44336";
+        scoreCounter.textContent = `Pontos: ${score}`;
+
+        const currentQuestion = questions[currentQuestionIndex];
+        const allOptionButtons =
+          optionsContainer.querySelectorAll(".option-btn");
+        allOptionButtons.forEach((btn) => {
+          btn.disabled = true;
+          if (btn.getAttribute("data-option") === currentQuestion.correct) {
+            btn.classList.add("correct");
+          }
+        });
+
+        setTimeout(() => {
+          currentQuestionIndex++;
+          showQuestion();
+        }, 2000);
+      }
+
+      function showFinalResults() {
+        quizContainer.style.display = "none";
+        finalScreen.style.display = "block";
+        finalScoreElement.textContent = score;
+        correctAnswersCountElement.textContent = correctAnswersCount;
+      }
+      startQuiz();
+    </script>
+  </body>
+</html>
